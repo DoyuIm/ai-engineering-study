@@ -4,6 +4,7 @@
 
 ## 문서 데이터
 - 팀 저장소 `members/*/wiki/pages/*.md` 16개 페이지 (팀 위키 `team/wiki/`는 아직 비어 있음)
+- 팀 저장소 클론을 `main` 브랜치에 두고 실행. 내 `doyu/week3` 브랜치에서는 `rag-pipeline.md`가 더해져 17페이지가 되고 청크 수가 달라짐 (500 기준 112 → 116, 점수는 같음)
 - 페이지 이름이 겹침 (`doyu/async-fastapi`, `mingi/async-fastapi`) → `metadata["page"]`를 `멤버/파일이름`으로 붙임
 - 청크 ID: `멤버/페이지::001` 형식, 중복 없음을 `assert`로 확인
 

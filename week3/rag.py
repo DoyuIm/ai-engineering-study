@@ -18,8 +18,15 @@ from langchain_text_splitters import RecursiveCharacterTextSplitter
 
 load_dotenv()
 
-# 팀 저장소 클론의 members/ 폴더 (각자 wiki/pages/*.md)
-WIKI_ROOT = Path(os.getenv("WIKI_ROOT") or "../../Study-service_basic/members")
+def default_wiki_root():
+    # 팀 저장소의 members/ 폴더 (각자 wiki/pages/*.md)
+    here = Path(__file__).resolve()
+    if here.parents[2].name == "members":  # 팀 저장소 members/doyu/week3/ 안에서 실행
+        return here.parents[2]
+    return here.parents[2] / "Study-service_basic" / "members"  # 개인 저장소 옆에 팀 저장소를 클론한 경우
+
+
+WIKI_ROOT = Path(os.getenv("WIKI_ROOT") or default_wiki_root())
 MODEL = "claude-opus-5-5"
 
 

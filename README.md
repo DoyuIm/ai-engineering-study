@@ -20,7 +20,7 @@
 | 1 | Docker 기초 | ✅ |
 | 2 | FastAPI + docker compose + Redis 캐시 | ✅ |
 | 3 | RAG 기초 (LangChain) | ✅ |
-| 4 | RAG 고도화 + `/ask` API | ⬜ |
+| 4 | RAG 고도화 + `/ask` API | ✅ |
 | 5 | Kubernetes 기초 (kind) | ⬜ |
 | 6 | RAG 앱 k8s 배포 | ⬜ |
 | 7 | 팀 프로젝트 통합 · 데모데이 | ⬜ |
@@ -32,6 +32,7 @@
 | 1 | `week1/` | Python 앱 이미지 빌드·실행, 빌드 캐시 순서 실험, `-p`·`-v` 실습, slim vs full 크기 비교 | 완료 |
 | 2 | `week2/` | FastAPI `/chat`(가짜 LLM) + Redis TTL 캐시, compose, async 실험 | 완료 |
 | 3 | `week3/` | 팀 위키 RAG: bge-m3 + Chroma + Claude, 출처 반환, 질문 20개로 Recall@5·MRR@5 채점 | 완료 |
+| 4 | `week4/` | BM25·하이브리드(RRF)·리랭커 8가지 비교, FastAPI `/ask` + Docker, 평가 데이터 누수 발견 | 완료 |
 
 ### 직접 잰 숫자
 
@@ -42,6 +43,9 @@
 | `/chat` 같은 질문 두 번 (LLM 2초 지연 가정) | 2,014ms → Redis 캐시 **0.6ms** | [week2-notes](wiki/raw/week2-notes.md) |
 | 동시 요청 3개, 각 3초 대기 | `async` + `await` 3s/3s/3s, `async` 안 `time.sleep` **3s/6s/9s** | [async-fastapi](wiki/pages/async-fastapi.md) |
 | 청크 크기별 검색 (질문 20개, k=5) | 200: Recall **1.00** / 500: 0.95 / 1000: 0.95 | [week3-notes](wiki/raw/week3-notes.md) |
+| 팀 질문 25개 MRR@5 | 벡터 0.780 · 하이브리드 0.787 · 리랭커 **0.863** (질문당 3.2초) | [week4-notes](wiki/raw/week4-notes.md) |
+| 평가 질문이 든 페이지를 검색에서 뺐을 때 | BM25 MRR 0.688 → **0.783** | [week4-notes](wiki/raw/week4-notes.md) |
+| Docker 서버 시작 (임베딩 색인 저장) | 2시간 넘게 → **91초** | [week4-notes](wiki/raw/week4-notes.md) |
 
 ## 위키 페이지
 
@@ -50,6 +54,7 @@
 | `wiki/pages/image-vs-container.md` | 리뷰 대기 |
 | `wiki/pages/async-fastapi.md` | 리뷰 대기 |
 | `wiki/pages/rag-pipeline.md` | 리뷰 대기 |
+| `wiki/pages/hybrid-search-reranker.md` | 리뷰 대기 |
 
 ## 실행해 보기
 
@@ -67,6 +72,11 @@ cd week3 && python3.11 -m venv .venv && .venv/bin/pip install -r requirements.tx
 cp .env.example .env               # ANTHROPIC_API_KEY 채우기 (없으면 검색만)
 .venv/bin/python rag.py "도커 이미지와 컨테이너의 차이는?"
 .venv/bin/python evaluate.py --sizes 200 500 1000
+
+# 4주차: 검색 비교와 /ask 서버
+cd week4 && python3.11 -m venv .venv && .venv/bin/pip install -r requirements.txt
+.venv/bin/python compare.py --exclude rag-evaluation_mingi
+.venv/bin/uvicorn app.main:app --port 8000      # POST /ask {"question": "..."}
 ```
 
 ## 폴더 구조
@@ -76,6 +86,7 @@ cp .env.example .env               # ANTHROPIC_API_KEY 채우기 (없으면 검�
 ├── week1/          Dockerfile 실습 (Dockerfile.bad, .full은 비교 실험용)
 ├── week2/          FastAPI 앱, docker-compose.yml, .env.example
 ├── week3/          RAG (rag.py), 채점 (evaluate.py), 질문셋 (questions.jsonl)
+├── week4/          검색기 (hybrid.py), 비교 (compare.py), /ask 서버 (app/), Dockerfile
 └── wiki/
     ├── raw/        실습 메모, 에러 로그, 참고 링크
     └── pages/      개념 정리 (한 줄 정의 / 왜 필요한가 / 최소 예제 / 막힌 점 / 출처)

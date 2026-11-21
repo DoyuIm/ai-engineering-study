@@ -21,7 +21,7 @@
 | 2 | FastAPI + docker compose + Redis 캐시 | ✅ |
 | 3 | RAG 기초 (LangChain) | ✅ |
 | 4 | RAG 고도화 + `/ask` API | ✅ |
-| 5 | Kubernetes 기초 (kind) | ⬜ |
+| 5 | Kubernetes 기초 (kind) | ✅ |
 | 6 | RAG 앱 k8s 배포 | ⬜ |
 | 7 | 팀 프로젝트 통합 · 데모데이 | ⬜ |
 
@@ -33,6 +33,7 @@
 | 2 | `week2/` | FastAPI `/chat`(가짜 LLM) + Redis TTL 캐시, compose, async 실험 | 완료 |
 | 3 | `week3/` | 팀 위키 RAG: bge-m3 + Chroma + Claude, 출처 반환, 질문 20개로 Recall@5·MRR@5 채점 | 완료 |
 | 4 | `week4/` | BM25·하이브리드(RRF)·리랭커 8가지 비교, FastAPI `/ask` + Docker, 평가 데이터 누수 발견 | 완료 |
+| 5 | `week5/` | kind 3노드 클러스터, nginx·2주차 FastAPI+Redis 배포, 자가 복구·스케일, 일부러 고장 내기, 무중단 롤링 업데이트 | 완료 |
 
 ### 직접 잰 숫자
 
@@ -46,6 +47,7 @@
 | 팀 질문 25개 MRR@5 | 벡터 0.780 · 하이브리드 0.787 · 리랭커 **0.863** (질문당 3.2초) | [week4-notes](wiki/raw/week4-notes.md) |
 | 평가 질문이 든 페이지를 검색에서 뺐을 때 | BM25 MRR 0.688 → **0.783** | [week4-notes](wiki/raw/week4-notes.md) |
 | Docker 서버 시작 (임베딩 색인 저장) | 2시간 넘게 → **91초** | [week4-notes](wiki/raw/week4-notes.md) |
+| 롤링 업데이트 중 요청 실패 | probe 없음 1/60 → readiness+preStop **0/80** | [week5-notes](wiki/raw/week5-notes.md) |
 
 ## 위키 페이지
 
@@ -55,6 +57,7 @@
 | `wiki/pages/async-fastapi.md` | 리뷰 대기 |
 | `wiki/pages/rag-pipeline.md` | 리뷰 대기 |
 | `wiki/pages/hybrid-search-reranker.md` | 리뷰 대기 |
+| `wiki/pages/k8s-pod-deployment-service.md` | 리뷰 대기 |
 
 ## 실행해 보기
 
@@ -77,6 +80,12 @@ cp .env.example .env               # ANTHROPIC_API_KEY 채우기 (없으면 검�
 cd week4 && python3.11 -m venv .venv && .venv/bin/pip install -r requirements.txt
 .venv/bin/python compare.py --exclude rag-evaluation_mingi
 .venv/bin/uvicorn app.main:app --port 8000      # POST /ask {"question": "..."}
+
+# 5주차: kind 클러스터에 배포
+kind create cluster --config week5/kind-config.yaml
+docker build -t doyu-week2-api:1.0 week2 && kind load docker-image doyu-week2-api:1.0 --name study
+kubectl apply -f week5/k8s/00-namespace.yaml -f week5/k8s/
+kubectl -n study port-forward svc/api 8000:8000
 ```
 
 ## 폴더 구조
@@ -87,6 +96,7 @@ cd week4 && python3.11 -m venv .venv && .venv/bin/pip install -r requirements.tx
 ├── week2/          FastAPI 앱, docker-compose.yml, .env.example
 ├── week3/          RAG (rag.py), 채점 (evaluate.py), 질문셋 (questions.jsonl)
 ├── week4/          검색기 (hybrid.py), 비교 (compare.py), /ask 서버 (app/), Dockerfile
+├── week5/          kind 설정, k8s/ 매니페스트 (nginx, redis, api), k8s/broken/ 고장 예시
 └── wiki/
     ├── raw/        실습 메모, 에러 로그, 참고 링크
     └── pages/      개념 정리 (한 줄 정의 / 왜 필요한가 / 최소 예제 / 막힌 점 / 출처)

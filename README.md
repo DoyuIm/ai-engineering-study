@@ -53,13 +53,13 @@
 
 ## 위키 페이지
 
-| 페이지 | 팀 위키 반영 |
-| --- | --- |
-| `wiki/pages/image-vs-container.md` | 리뷰 대기 |
-| `wiki/pages/async-fastapi.md` | 리뷰 대기 |
-| `wiki/pages/rag-pipeline.md` | 리뷰 대기 |
-| `wiki/pages/hybrid-search-reranker.md` | 리뷰 대기 |
-| `wiki/pages/k8s-pod-deployment-service.md` | 리뷰 대기 |
+| 주차 | 페이지 | 팀 위키 반영 |
+| --- | --- | --- |
+| 1 | [image-vs-container](wiki/pages/image-vs-container.md) | ✅ [반영됨](https://github.com/SoleMin/Study-service_basic/blob/main/team/wiki/image-vs-container_doyu.md) |
+| 2 | [async-fastapi](wiki/pages/async-fastapi.md) | ✅ [반영됨](https://github.com/SoleMin/Study-service_basic/blob/main/team/wiki/async-fastapi_doyu.md) |
+| 3 | [rag-pipeline](wiki/pages/rag-pipeline.md) | ✅ [반영됨](https://github.com/SoleMin/Study-service_basic/blob/main/team/wiki/rag-pipeline_doyu.md) |
+| 4 | [hybrid-search-reranker](wiki/pages/hybrid-search-reranker.md) | 🔄 리뷰 대기 ([PR #20](https://github.com/SoleMin/Study-service_basic/pull/20)) |
+| 5 | [k8s-pod-deployment-service](wiki/pages/k8s-pod-deployment-service.md) | ✅ [반영됨](https://github.com/SoleMin/Study-service_basic/blob/main/team/wiki/k8s-pod-deployment-service_doyu.md) |
 
 ## 실행해 보기
 

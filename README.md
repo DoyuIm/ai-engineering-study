@@ -13,6 +13,8 @@
 
 > 팀 저장소: [SoleMin/Study-service_basic](https://github.com/SoleMin/Study-service_basic) · 이 저장소는 팀 저장소의 `members/doyu/` 폴더를 옮겨 온 것이에요.
 
+> 주차별로 한 것, 재 본 숫자, 막힌 점을 한 곳에 모은 기록: [PROGRESS.md](PROGRESS.md)
+
 ## 로드맵
 
 | 주차 | 주제 | 상태 |
